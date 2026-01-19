@@ -24,7 +24,8 @@ const questions = [
 ];
 
 
-let currentIndex = 0;
+let currentIndex = Math.floor(Math.random() * questions.length);
+
 
 // 画面の要素（idやclassが違う場合は、ここだけ合わせればOK）
 const questionEl = document.getElementById("question");
