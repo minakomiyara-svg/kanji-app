@@ -10,7 +10,19 @@ const questions = [
   { kanji: "日", choices: ["にち", "ひ", "やま"], answer: "ひ" },
   { kanji: "花", choices: ["はな", "みず", "いし"], answer: "はな" },
   { kanji: "水", choices: ["みず", "き", "つち"], answer: "みず" },
+
+  { kanji: "木", choices: ["き", "うみ", "いぬ"], answer: "き" },
+  { kanji: "森", choices: ["もり", "かわ", "はな"], answer: "もり" },
+  { kanji: "石", choices: ["いし", "みず", "そら"], answer: "いし" },
+  { kanji: "土", choices: ["つち", "ひ", "つき"], answer: "つち" },
+  { kanji: "火", choices: ["ひ", "みず", "き"], answer: "ひ" },
+  { kanji: "雨", choices: ["あめ", "ゆき", "かぜ"], answer: "あめ" },
+  { kanji: "雪", choices: ["あめ", "ゆき", "ひ"], answer: "ゆき" },
+  { kanji: "風", choices: ["かぜ", "あめ", "つち"], answer: "かぜ" },
+  { kanji: "魚", choices: ["さかな", "とり", "ねこ"], answer: "さかな" },
+  { kanji: "虫", choices: ["むし", "さかな", "いし"], answer: "むし" },
 ];
+
 
 let currentIndex = 0;
 
