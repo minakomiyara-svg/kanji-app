@@ -23,6 +23,8 @@ const questions = [
   { kanji: "虫", choices: ["むし", "さかな", "いし"], answer: "むし" },
 ];
 
+const okSound = document.getElementById("sound-ok");
+const ngSound = document.getElementById("sound-ng");
 
 let currentIndex = Math.floor(Math.random() * questions.length);
 
@@ -61,21 +63,27 @@ function renderQuestion() {
   // 次へボタンは最初は押せない
   if (nextBtn) nextBtn.disabled = true;
 }
+ 
 
 function checkAnswer(selected) {
   const q = questions[currentIndex];
 
+  const sel = String(selected).trim();
+  const ans = String(q.answer).trim();
+
   if (!messageEl) return;
 
-  if (selected === q.answer) {
-    messageEl.textContent = "正解！🎉";
+  if (sel === ans) {
+    messageEl.textContent = "正解！ 🎉";
+    if (okSound) { okSound.currentTime = 0; okSound.play(); }
   } else {
     messageEl.textContent = `ちがうよ。正解は「${q.answer}」`;
+    if (ngSound) { ngSound.currentTime = 0; ngSound.play(); }
   }
 
-  // 次へボタンを押せるように
   if (nextBtn) nextBtn.disabled = false;
 }
+
 
 // 次の問題へ
 function nextQuestion() {
