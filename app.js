@@ -35,6 +35,12 @@ const messageEl = document.getElementById("message");
 const nextBtn = document.getElementById("nextBtn");
 
 const levelSelect = document.getElementById("level");
+let activeLevel = (levelSelect && levelSelect.value) ? levelSelect.value : "normal";
+
+function getFilteredQuestions() {
+  return questions.filter(q => q.level === activeLevel);
+}
+
 
 // 質問を表示
 function renderQuestion() {
