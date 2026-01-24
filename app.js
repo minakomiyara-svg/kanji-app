@@ -1,26 +1,25 @@
 // 10問（好きに増やせます）
 const questions = [
-  { kanji: "犬", choices: ["いぬ", "ねこ", "とり"], answer: "いぬ" },
-  { kanji: "猫", choices: ["さる", "ねこ", "うま"], answer: "ねこ" },
-  { kanji: "鳥", choices: ["とり", "さかな", "いぬ"], answer: "とり" },
-  { kanji: "山", choices: ["かわ", "うみ", "やま"], answer: "やま" },
-  { kanji: "川", choices: ["かわ", "もり", "そら"], answer: "かわ" },
-  { kanji: "空", choices: ["そら", "はな", "つき"], answer: "そら" },
-  { kanji: "月", choices: ["ひ", "つき", "ほし"], answer: "つき" },
-  { kanji: "日", choices: ["にち", "ひ", "やま"], answer: "ひ" },
-  { kanji: "花", choices: ["はな", "みず", "いし"], answer: "はな" },
-  { kanji: "水", choices: ["みず", "き", "つち"], answer: "みず" },
-
-  { kanji: "木", choices: ["き", "うみ", "いぬ"], answer: "き" },
-  { kanji: "森", choices: ["もり", "かわ", "はな"], answer: "もり" },
-  { kanji: "石", choices: ["いし", "みず", "そら"], answer: "いし" },
-  { kanji: "土", choices: ["つち", "ひ", "つき"], answer: "つち" },
-  { kanji: "火", choices: ["ひ", "みず", "き"], answer: "ひ" },
-  { kanji: "雨", choices: ["あめ", "ゆき", "かぜ"], answer: "あめ" },
-  { kanji: "雪", choices: ["あめ", "ゆき", "ひ"], answer: "ゆき" },
-  { kanji: "風", choices: ["かぜ", "あめ", "つち"], answer: "かぜ" },
-  { kanji: "魚", choices: ["さかな", "とり", "ねこ"], answer: "さかな" },
-  { kanji: "虫", choices: ["むし", "さかな", "いし"], answer: "むし" },
+  { level: "easy",  kanji: "犬", choices: ["いぬ", "ねこ", "とり"], answer: "いぬ" },
+  { level: "hard",  kanji: "猫", choices: ["さる", "ねこ", "うま"], answer: "ねこ" },
+  { level: "hard",  kanji: "鳥", choices: ["とり", "さかな", "いぬ"], answer: "とり" },
+  { level: "easy",  kanji: "山", choices: ["かわ", "うみ", "やま"], answer: "やま" },
+  { level: "easy",  kanji: "川", choices: ["かわ", "もり", "そら"], answer: "かわ" },
+  { level: "easy",  kanji: "空", choices: ["そら", "はな", "つき"], answer: "そら" },
+  { level: "normal",  kanji: "月", choices: ["ひ", "つき", "ほし"], answer: "つき" },
+  { level: "normal",  kanji: "日", choices: ["にち", "ひ", "やま"], answer: "ひ" },
+  { level: "normal",  kanji: "花", choices: ["はな", "みず", "いし"], answer: "はな" },
+  { level: "normal",  kanji: "水", choices: ["みず", "き", "つち"], answer: "みず" },
+  { level: "normal",  kanji: "木", choices: ["き", "うみ", "いぬ"], answer: "き" },
+  { level: "normal",  kanji: "森", choices: ["もり", "かわ", "はな"], answer: "もり" },
+  { level: "normal",  kanji: "石", choices: ["いし", "みず", "そら"], answer: "いし" },
+  { level: "normal",  kanji: "土", choices: ["つち", "ひ", "つき"], answer: "つち" },
+  { level: "normal",  kanji: "火", choices: ["ひ", "みず", "き"], answer: "ひ" },
+  { level: "easy",  kanji: "雨", choices: ["あめ", "ゆき", "かぜ"], answer: "あめ" },
+  { level: "hard",  kanji: "雪", choices: ["あめ", "ゆき", "ひ"], answer: "ゆき" },
+  { level: "hard",  kanji: "風", choices: ["かぜ", "あめ", "つち"], answer: "かぜ" },
+  { level: "hard",  kanji: "魚", choices: ["さかな", "とり", "ねこ"], answer: "さかな" },
+  { level: "hard",  kanji: "虫", choices: ["むし", "さかな", "いし"], answer: "むし" },
 ];
 
 const okSound = document.getElementById("sound-ok");
@@ -34,6 +33,8 @@ const questionEl = document.getElementById("question");
 const choicesWrap = document.getElementById("choices");
 const messageEl = document.getElementById("message");
 const nextBtn = document.getElementById("nextBtn");
+
+const levelSelect = document.getElementById("level");
 
 // 質問を表示
 function renderQuestion() {
