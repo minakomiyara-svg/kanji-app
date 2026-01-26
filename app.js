@@ -14,12 +14,12 @@ const questions = [
   { level: "easy",  kanji: "森", icon:"🌳", choices: ["もり", "かわ", "はな"], answer: "もり" },
   { level: "easy",  kanji: "石", icon:"🪨 ", choices: ["いし", "みず", "そら"], answer: "いし" },
   { level: "easy",  kanji: "土", icon:"", choices: ["つち", "ひ", "つき"], answer: "つち" },
-  { level: "easy",  kanji: "火", choices: ["ひ", "みず", "き"], answer: "ひ" },
-  { level: "easy",  kanji: "雨", choices: ["あめ", "ゆき", "かぜ"], answer: "あめ" },
-  { level: "hard",  kanji: "雪", choices: ["あめ", "ゆき", "ひ"], answer: "ゆき" },
-  { level: "hard",  kanji: "風", choices: ["かぜ", "あめ", "つち"], answer: "かぜ" },
-  { level: "hard",  kanji: "魚", choices: ["さかな", "とり", "ねこ"], answer: "さかな" },
-  { level: "hard",  kanji: "虫", choices: ["むし", "さかな", "いし"], answer: "むし" },
+  { level: "easy",  kanji: "火", icon:"🔥", choices: ["ひ", "みず", "き"], answer: "ひ" },
+  { level: "easy",  kanji: "雨", icon:"🌧️", choices: ["あめ", "ゆき", "かぜ"], answer: "あめ" },
+  { level: "hard",  kanji: "雪", icon:"❄️", choices: ["あめ", "ゆき", "ひ"], answer: "ゆき" },
+  { level: "hard",  kanji: "風", icon:"💨 ", choices: ["かぜ", "あめ", "つち"], answer: "かぜ" },
+  { level: "hard",  kanji: "魚", icon:"🐟 ", choices: ["さかな", "とり", "ねこ"], answer: "さかな" },
+  { level: "hard",  kanji: "虫", icon:"🐛 ", choices: ["むし", "さかな", "いし"], answer: "むし" },
 ];
 
 const okSound = document.getElementById("sound-ok");
@@ -48,7 +48,8 @@ function renderQuestion() {
 
   // 「『犬』はどれ？」みたいに表示
   if (questionEl) {
-    questionEl.textContent = `「${q.kanji}」はどれ？`;
+   const icon = q.icon ? `${q.icon} ` : "";
+　　questionEl.textContent = `${icon}「${q.kanji}」はどれ？`;
   }
 
   // 選択肢を作り直す
