@@ -27,7 +27,7 @@ const questions = [
   { level: "easy", kanji: "音", icon: "🔊", choices: ["おと", "ひかり", "かおり"], answer: "おと" },
   { level: "easy", kanji: "貝", icon: "🐚", choices: ["かい", "さかな", "とり"], answer: "かい" },
   { level: "easy", kanji: "気", icon: "💨", choices: ["き", "みず", "ひ"], answer: "き" },
-  { level: "easy", kanji: "休", icon: "😴", choices: ["やす", "はたら", "あそ"], answer: "やす" },
+  { level: "easy", kanji: "休む", icon: "😴", choices: ["やすむ", "はたら", "あそ"], answer: "やすむ" },
   { level: "easy", kanji: "玉", icon: "💎", choices: ["たま", "いし", "きん"], answer: "たま" },
   { level: "easy", kanji: "金", icon: "💰", choices: ["きん", "ぎん", "どう"], answer: "きん" },
   { level: "easy", kanji: "糸", icon: "🧵", choices: ["いと", "ぬの", "き"], answer: "いと" },
@@ -160,7 +160,7 @@ let currentIndex = Math.floor(Math.random() * questions.length);
 const questionEl = document.getElementById("question");
 const choicesWrap = document.getElementById("choices");
 const messageEl = document.getElementById("message");
-
+const sparkles = document.getElementById("sparkles");
 const levelSelect = document.getElementById("level");
 let activeLevel = (levelSelect && levelSelect.value) ? levelSelect.value : "normal";
 
@@ -251,7 +251,7 @@ renderQuestion();
 function sparkleBurst() {
   if (!sparkles) return;
 
-  // 既存のキラキラを消す（連打対策）
+  // 既存を消す（連打対策）
   sparkles.innerHTML = "";
 
   const count = 14;
@@ -259,7 +259,7 @@ function sparkleBurst() {
     const s = document.createElement("div");
     s.className = "sparkle";
 
-    // ひろがる方向（ランダム）
+    // 飛ぶ方向（ランダム）
     const dx = (Math.random() * 260 - 130).toFixed(0) + "px";
     const dy = (Math.random() * 220 - 110).toFixed(0) + "px";
     s.style.setProperty("--dx", dx);
@@ -270,12 +270,18 @@ function sparkleBurst() {
     s.style.width = size + "px";
     s.style.height = size + "px";
 
+    // キラキラっぽい色（白〜薄黄色系）
+    const r = 220 + Math.floor(Math.random() * 35);
+    const g = 220 + Math.floor(Math.random() * 35);
+    const b = 200 + Math.floor(Math.random() * 55);
+    s.style.background = `rgb(${r},${g},${b})`;
+
     sparkles.appendChild(s);
   }
 
-  // アニメが終わったら掃除
+  // 片付け
   setTimeout(() => {
     if (sparkles) sparkles.innerHTML = "";
-  }, 750);
+  }, 800);
 }
 
