@@ -178,7 +178,7 @@ h1{
   place-items: center;
   background: rgba(20,20,30,.45);
   backdrop-filter: blur(6px);
-  z-index: 10000;
+  z-index: 2147483647;
   padding: 20px;
 }
 
