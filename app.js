@@ -165,6 +165,8 @@ const nextBtn = document.getElementById("nextBtn");
 const levelSelect = document.getElementById("level");
 let activeLevel = (levelSelect && levelSelect.value) ? levelSelect.value : "normal";
 
+let autoNextTimer = null;
+
 function getFilteredQuestions() {
   if (activeLevel === "1年生") {
     return questions.filter(q => q.level === "easy");
@@ -231,9 +233,11 @@ function checkAnswer(selected) {
 
   if (nextBtn) nextBtn.disabled = false;
   // ★自動で次の問題へ（2秒後）
-setTimeout(() => {
+if (autoNextTimer) clearTimeout(autoNextTimer);
+autoNextTimer = setTimeout(() => {
   nextQuestion();
 }, 2000);
+
 
 }
 
