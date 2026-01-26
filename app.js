@@ -1,4 +1,4 @@
-// 123問（好きに増やせます）
+// 158問（好きに増やせます）
 const questions = [
   { level:"easy", kanji:"犬", icon:"🐶", choices:["いぬ","ねこ","とり"], answer:"いぬ" },
   { level:"hard", kanji:"猫", icon:"🐱", choices:["さる","ねこ","うま"], answer:"ねこ" },
@@ -19,7 +19,47 @@ const questions = [
   { level: "normal",  kanji: "雪", icon:"❄️", choices: ["あめ", "ゆき", "ひ"], answer: "ゆき" },
   { level: "normal",  kanji: "風", icon:"💨 ", choices: ["かぜ", "あめ", "つち"], answer: "かぜ" },
   { level: "normal",  kanji: "魚", icon:"🐟 ", choices: ["さかな", "とり", "ねこ"], answer: "さかな" },
-  { level: "hard",  kanji: "虫", icon:"🐛 ", choices: ["むし", "さかな", "いし"], answer: "むし" },
+  { level: "easy",  kanji: "虫", icon:"🐛 ", choices: ["むし", "さかな", "いし"], answer: "むし" },
+  { level: "easy", kanji: "学", icon: "🎓", choices: ["まな", "なら", "おし"], answer: "まな" },
+  { level: "easy", kanji: "右", icon: "👉", choices: ["みぎ", "ひだり", "うえ"], answer: "みぎ" },
+  { level: "easy", kanji: "円", icon: "⭕", choices: ["まる", "しかく", "さんかく"], answer: "まる" },
+  { level: "easy", kanji: "王", icon: "👑", choices: ["おう", "ひめ", "さむらい"], answer: "おう" },
+  { level: "easy", kanji: "音", icon: "🔊", choices: ["おと", "ひかり", "かおり"], answer: "おと" },
+  { level: "easy", kanji: "貝", icon: "🐚", choices: ["かい", "さかな", "とり"], answer: "かい" },
+  { level: "easy", kanji: "気", icon: "💨", choices: ["き", "みず", "ひ"], answer: "き" },
+  { level: "easy", kanji: "休", icon: "😴", choices: ["やす", "はたら", "あそ"], answer: "やす" },
+  { level: "easy", kanji: "玉", icon: "💎", choices: ["たま", "いし", "きん"], answer: "たま" },
+  { level: "easy", kanji: "金", icon: "💰", choices: ["きん", "ぎん", "どう"], answer: "きん" },
+  { level: "easy", kanji: "糸", icon: "🧵", choices: ["いと", "ぬの", "き"], answer: "いと" },
+  { level: "easy", kanji: "字", icon: "📝", choices: ["じ", "かき", "よみ"], answer: "じ" },
+  { level: "easy", kanji: "生", icon: "🌱", choices: ["いき", "し", "ね"], answer: "いき" },
+  { level: "easy", kanji: "青", icon: "🔵", choices: ["あお", "あか", "き"], answer: "あお" },
+  { level: "easy", kanji: "夕", icon: "🌅", choices: ["ゆう", "あさ", "ひる"], answer: "ゆう" },
+  { level: "easy", kanji: "石", icon: "🪨", choices: ["いし", "みず", "ひ"], answer: "いし" },
+  { level: "easy", kanji: "赤", icon: "🔴", choices: ["あか", "あお", "しろ"], answer: "あか" },
+  { level: "easy", kanji: "先", icon: "👆", choices: ["さき", "うしろ", "なか"], answer: "さき" },
+  { level: "easy", kanji: "早", icon: "⏩", choices: ["はや", "おそ", "ゆっくり"], answer: "はや" },
+  { level: "easy", kanji: "村", icon: "🏘️", choices: ["むら", "まち", "もり"], answer: "むら" },
+  { level: "easy", kanji: "竹", icon: "🎋", choices: ["たけ", "き", "くさ"], answer: "たけ" },
+  { level: "easy", kanji: "町", icon: "🏙️", choices: ["まち", "むら", "もり"], answer: "まち" },
+  { level: "easy", kanji: "天", icon: "🌤️", choices: ["てん", "ち", "そら"], answer: "てん" },
+  { level: "easy", kanji: "田", icon: "🌾", choices: ["た", "はたけ", "もり"], answer: "た" },
+  { level: "easy", kanji: "二", icon: "2️⃣", choices: ["に", "いち", "さん"], answer: "に" },
+  { level: "easy", kanji: "日", icon: "☀️", choices: ["ひ", "つき", "ほし"], answer: "ひ" },
+  { level: "easy", kanji: "入", icon: "➡️", choices: ["い", "で", "た"], answer: "い" },
+  { level: "easy", kanji: "年", icon: "📅", choices: ["とし", "つき", "ひ"], answer: "とし" },
+  { level: "easy", kanji: "八", icon: "8️⃣", choices: ["はち", "しち", "く"], answer: "はち" },
+  { level: "easy", kanji: "百", icon: "💯", choices: ["ひゃく", "じゅう", "せん"], answer: "ひゃく" },
+  { level: "easy", kanji: "文", icon: "📄", choices: ["ぶん", "じ", "かき"], answer: "ぶん" },
+  { level: "easy", kanji: "木", icon: "🌲", choices: ["き", "くさ", "いし"], answer: "き" },
+  { level: "easy", kanji: "本", icon: "📖", choices: ["ほん", "かみ", "え"], answer: "ほん" },
+  { level: "easy", kanji: "名", icon: "📛", choices: ["な", "かた", "もの"], answer: "な" },
+  { level: "easy", kanji: "目", icon: "👁️", choices: ["め", "みみ", "くち"], answer: "め" },
+  { level: "easy", kanji: "立", icon: "🧍", choices: ["た", "すわ", "ね"], answer: "た" },
+  { level: "easy", kanji: "力", icon: "💪", choices: ["ちから", "はやさ", "かしこさ"], answer: "ちから" },
+  { level: "easy", kanji: "林", icon: "🌲", choices: ["はやし", "もり", "き"], answer: "はやし" },
+  { level: "easy", kanji: "六", icon: "6️⃣", choices: ["ろく", "ご", "しち"], answer: "ろく" },
+];
   { level: "easy", kanji: "人", icon: "👤", choices: ["ひと", "くち", "て"], answer: "ひと" },
   { level: "easy", kanji: "口", icon: "👄", choices: ["くち", "め", "みみ"], answer: "くち" },
   { level: "easy", kanji: "手", icon: "✋", choices: ["て", "あし", "はな"], answer: "て" },
@@ -50,30 +90,26 @@ const questions = [
   { level: "easy", kanji: "本", icon: "📖", choices: ["ほん", "おんがく", "でんわ"], answer: "ほん" },
   { level: "normal", kanji: "電話", icon: "📞", choices: ["でんわ", "でんしゃ", "ひこうき"], answer: "でんわ" },
   { level: "normal", kanji: "電車", icon: "🚆", choices: ["でんしゃ", "でんわ", "ふね"], answer: "でんしゃ" },
-  { level: "normal", kanji: "船", icon: "🚢", choices: ["ふね", "ひこうき", "でんしゃ"], answer: "ふね" },  { level: "easy", kanji: "一", icon: "1️⃣", choices: ["いち", "に", "さん"], answer: "いち" },
+  { level: "normal", kanji: "船", icon: "🚢", choices: ["ふね", "ひこうき", "でんしゃ"], answer: "ふね" },
+  { level: "easy", kanji: "一", icon: "1️⃣", choices: ["いち", "に", "さん"], answer: "いち" },
   { level: "easy", kanji: "二", icon: "2️⃣", choices: ["に", "いち", "さん"], answer: "に" },
   { level: "easy", kanji: "三", icon: "3️⃣", choices: ["さん", "に", "よん"], answer: "さん" },
   { level: "easy", kanji: "四", icon: "4️⃣", choices: ["よん", "さん", "ご"], answer: "よん" },
   { level: "easy", kanji: "五", icon: "5️⃣", choices: ["ご", "よん", "ろく"], answer: "ご" },
   { level: "easy", kanji: "六", icon: "6️⃣", choices: ["ろく", "ご", "しち"], answer: "ろく" },
   { level: "easy", kanji: "七", icon: "7️⃣", choices: ["しち", "ろく", "はち"], answer: "しち" },
-  { level: "easy", kanji: "八", icon: "8️⃣", choices: ["はち", "しち", "く"], answer: "はち" },
   { level: "easy", kanji: "九", icon: "9️⃣", choices: ["く", "はち", "じゅう"], answer: "く" },
   { level: "easy", kanji: "十", icon: "🔟", choices: ["じゅう", "く", "ひゃく"], answer: "じゅう" },
-  { level: "easy", kanji: "百", icon: "💯", choices: ["ひゃく", "じゅう", "せん"], answer: "ひゃく" },
   { level: "easy", kanji: "千", icon: "1️⃣0️⃣0️⃣0️⃣", choices: ["せん", "ひゃく", "まん"], answer: "せん" },
   { level: "easy", kanji: "上", icon: "⬆️", choices: ["うえ", "した", "なか"], answer: "うえ" },
   { level: "easy", kanji: "下", icon: "⬇️", choices: ["した", "うえ", "なか"], answer: "した" },
   { level: "easy", kanji: "中", icon: "⭕", choices: ["なか", "うえ", "した"], answer: "なか" },
   { level: "easy", kanji: "大", icon: "", choices: ["おお", "ちい", "なが"], answer: "おお" },
   { level: "easy", kanji: "小", icon: "", choices: ["ちい", "おお", "みじか"], answer: "ちい" },
-  { level: "easy", kanji: "田", icon: "🌾", choices: ["た", "はたけ", "もり"], answer: "た" },
   { level: "easy", kanji: "畑", icon: "🌾", choices: ["はたけ", "た", "もり"], answer: "はたけ" },
-  { level: "easy", kanji: "林", icon: "🌲", choices: ["はやし", "もり", "き"], answer: "はやし" },
   { level: "easy", kanji: "草", icon: "🌱", choices: ["くさ", "はな", "き"], answer: "くさ" },
   { level: "easy", kanji: "星", icon: "⭐", choices: ["ほし", "つき", "ひ"], answer: "ほし" },
   { level: "easy", kanji: "雲", icon: "☁️", choices: ["くも", "あめ", "そら"], answer: "くも" },
-  { level: "easy", kanji: "天", icon: "🌤️", choices: ["てん", "ち", "そら"], answer: "てん" },
   { level: "easy", kanji: "地", icon: "🌍", choices: ["ち", "てん", "もり"], answer: "ち" },
   { level: "easy", kanji: "東", icon: "➡️", choices: ["ひがし", "にし", "きた"], answer: "ひがし" },
   { level: "easy", kanji: "南", icon: "⬇️", choices: ["みなみ", "きた", "ひがし"], answer: "みなみ" },
@@ -134,8 +170,10 @@ const levelSelect = document.getElementById("level");
 let activeLevel = (levelSelect && levelSelect.value) ? levelSelect.value : "normal";
 
 function getFilteredQuestions() {
-  if (activeLevel === "normal") {
-    return questions.filter(q => q.level === "easy" || q.level === "hard");
+  if (activeLevel === "1年生") {
+    return questions.filter(q => q.level === "easy");
+  } else if (activeLevel === "2年生") {
+    return questions.filter(q => q.level === "normal" || q.level === "hard");
   }
   return questions.filter(q => q.level === activeLevel);
 }
