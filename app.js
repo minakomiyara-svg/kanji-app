@@ -158,7 +158,10 @@ function renderQuestion() {
   if (choicesWrap) {
     choicesWrap.innerHTML = ""; // いったん空にする
 
-    q.choices.forEach((text) => {
+    // 選択肢をランダムにシャッフル
+    const shuffledChoices = [...q.choices].sort(() => Math.random() - 0.5);
+
+    shuffledChoices.forEach((text) => {
       const btn = document.createElement("button");
       btn.textContent = text;
       btn.className = "choiceBtn";
