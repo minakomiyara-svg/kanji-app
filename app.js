@@ -99,7 +99,7 @@ const questions = [
   { level: "easy", kanji: "千", icon: "1️⃣0️⃣0️⃣0️⃣", choices: ["せん", "ひゃく", "まん"], answer: "せん" },
   { level: "easy", kanji: "上", icon: "⬆️", choices: ["うえ", "した", "なか"], answer: "うえ" },
   { level: "easy", kanji: "下", icon: "⬇️", choices: ["した", "うえ", "なか"], answer: "した" },
-  { level: "easy", kanji: "中", icon: "⭕", choices: ["なか", "うえ", "した"], answer: "なか" },
+  { level: "easy", kanji: "中", icon: "", choices: ["なか", "うえ", "した"], answer: "なか" },
   { level: "easy", kanji: "大きい", icon: "", choices: ["おおきい", "ちい", "なが"], answer: "おおきい" },
   { level: "easy", kanji: "小さい", icon: "", choices: ["ちいさい", "おお", "みじか"], answer: "ちいさい" },
   { level: "easy", kanji: "畑", icon: "🌾", choices: ["はたけ", "た", "もり"], answer: "はたけ" },
@@ -148,7 +148,28 @@ const questions = [
   { level: "normal", kanji: "切る", icon: "✂️", choices: ["きる", "たつ", "とまる"], answer: "きる" },
   { level: "easy", kanji: "学ぶ", icon: "🎓", choices: ["まなぶ", "ならう", "おしえる"], answer: "まなぶ" },
   { level: "normal", kanji: "習う", icon: "📝", choices: ["ならう", "まなぶ", "おしえる"], answer: "ならう" },
-  { level: "normal", kanji: "教える", icon: "👨‍🏫", choices: ["おしえる", "ならう", "まなぶ"], answer: "おしえる" },];
+  { level: "normal", kanji: "教える", icon: "👨‍🏫", choices: ["おしえる", "ならう", "まなぶ"], answer: "おしえる" },
+  { level: "normal", kanji:"弓",   icon:"🏹", choices:["ゆみ","や","かたな"], answer:"ゆみ" },
+  { level: "normal", kanji:"矢",   icon:"🏹", choices:["や","ゆみ","つの"],   answer:"や" },
+  { level: "normal", kanji:"羽",   icon:"🪶", choices:["はね","つの","いわ"], answer:"はね" },
+  { level: "normal", kanji:"角",   icon:"🦌", choices:["つの","はね","ひかり"], answer:"つの" },
+  { level: "normal", kanji:"光",   icon:"✨", choices:["ひかり","はれ","あさ"], answer:"ひかり" },
+  { level: "normal", kanji:"刀",   icon:"🗡️", choices:["かたな","ゆみ","いわ"], answer:"かたな" },
+  { level: "normal", kanji:"春",   icon:"🌸", choices:["はる","なつ","あき"], answer:"はる" },
+  { level: "normal", kanji:"夏",   icon:"🌻", choices:["なつ","はる","ふゆ"], answer:"なつ" },
+  { level: "normal", kanji:"秋",   icon:"🍂", choices:["あき","なつ","はる"], answer:"あき" },
+  { level: "normal", kanji:"冬",   icon:"❄️", choices:["ふゆ","はる","あさ"], answer:"ふゆ" },
+  { level: "normal", kanji:"岩",   icon:"🪨", choices:["いわ","こめ","にく"], answer:"いわ" },
+  { level: "normal", kanji:"朝",   icon:"🌅", choices:["あさ","はれ","ひかり"], answer:"あさ" },
+  { level: "normal", kanji:"晴れ", icon:"☀️", choices:["はれ","あさ","ふゆ"], answer:"はれ" },
+  { level: "normal", kanji:"肉",   icon:"🥩", choices:["にく","こめ","いわ"], answer:"にく" },
+  { level: "normal", kanji:"広い", icon:"↔️", choices:["ひろい","ほそい","ふとい"], answer:"ひろい" },
+  { level: "normal", kanji:"細い", icon:"🧵", choices:["ほそい","ふとい","よわい"], answer:"ほそい" },
+  { level: "normal", kanji:"太い", icon:"🧶", choices:["ふとい","ほそい","ひろい"], answer:"ふとい" },
+  { level: "normal", kanji:"弱い", icon:"🫧", choices:["よわい","ふとい","ひろい"], answer:"よわい" },
+  { level: "normal", kanji:"首",   icon:"🧣", choices:["くび","こめ","にく"], answer:"くび" },
+  { level: "normal", kanji:"米",   icon:"🍚", choices:["こめ","にく","あさ"], answer:"こめ" },
+];
 
 const okSound = document.getElementById("sound-ok");
 const ngSound = document.getElementById("sound-ng");
