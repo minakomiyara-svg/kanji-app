@@ -342,3 +342,16 @@ select{
 .sparkle{
   box-shadow: 0 0 14px rgba(255, 255, 255, .92);
 }
+
+/* 選択肢を2列にする（スマホは1列） */
+#choices{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 480px){
+  #choices{
+    grid-template-columns: 1fr;
+  }
+}
