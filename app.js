@@ -166,6 +166,10 @@ let activeLevel = (levelSelect && levelSelect.value) ? levelSelect.value : "norm
 
 let autoNextTimer = null;
 
+const startScreen = document.getElementById("startScreen");
+const startBtn = document.getElementById("startBtn");
+
+
 function getFilteredQuestions() {
   if (activeLevel === "1年生") {
     return questions.filter(q => q.level === "easy");
@@ -246,7 +250,17 @@ function nextQuestion() {
 }
 
 // 最初の表示
-renderQuestion();
+function startGame() {
+  if (startScreen) startScreen.classList.add("hidden");
+  currentIndex = 0;
+  renderQuestion(); // ここで初めて問題表示
+}
+
+// スタート画面を表示したままにする（最初は何もしない）
+if (startBtn) {
+  startBtn.addEventListener("click", startGame);
+}
+
 
 function sparkleBurst() {
   if (!sparkles) return;
