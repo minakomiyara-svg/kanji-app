@@ -160,7 +160,6 @@ let currentIndex = Math.floor(Math.random() * questions.length);
 const questionEl = document.getElementById("question");
 const choicesWrap = document.getElementById("choices");
 const messageEl = document.getElementById("message");
-const nextBtn = document.getElementById("nextBtn");
 
 const levelSelect = document.getElementById("level");
 let activeLevel = (levelSelect && levelSelect.value) ? levelSelect.value : "normal";
@@ -230,8 +229,6 @@ function checkAnswer(selected) {
     messageEl.textContent = `ちがうよ。正解は「${q.answer}」`;
     if (ngSound) { ngSound.currentTime = 0; ngSound.play(); }
   }
-
-  if (nextBtn) nextBtn.disabled = false;
   // ★自動で次の問題へ（2秒後）
 if (autoNextTimer) clearTimeout(autoNextTimer);
 autoNextTimer = setTimeout(() => {
@@ -246,11 +243,6 @@ autoNextTimer = setTimeout(() => {
 function nextQuestion() {
   currentIndex = (currentIndex + 1) % questions.length;
   renderQuestion();
-}
-
-// 次へボタン
-if (nextBtn) {
-  nextBtn.addEventListener("click", nextQuestion);
 }
 
 // 最初の表示
