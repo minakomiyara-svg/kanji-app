@@ -230,6 +230,11 @@ function checkAnswer(selected) {
   }
 
   if (nextBtn) nextBtn.disabled = false;
+  // ★自動で次の問題へ（2秒後）
+setTimeout(() => {
+  nextQuestion();
+}, 2000);
+
 }
 
 
