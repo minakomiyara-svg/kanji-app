@@ -251,6 +251,7 @@ const ngSound = document.getElementById("sound-ng");
 
 let currentIndex = 0;
 let correctCount = 0;
+let totalAnswered = 0; // for end‑of‑game detection
 
 
 // 画面の要素（idやclassが違う場合は、ここだけ合わせればOK）
@@ -272,44 +273,40 @@ function getFilteredQuestions() {
   return questions.filter(q => q.grade === activeLevel);
 }
 
+function getMedal(score, total) {
+  if (score === total) {
+    return "🥇 すごい！パーフェクト！";
+  } else if (score >= Math.ceil(total * 0.7)) {
+    return "🥈 すごい！よくできたね！";
+  } else if (score >= Math.ceil(total * 0.4)) {
+    return "🥉 がんばったね！";
+  } else {
+    return "🌱 つぎもやってみよう！";
+  }
+}
+
 
 // 質問を表示
 function renderQuestion() {
-
-  scoreEl.textContent = `正解 ${correctCount} / ${questions.length}`;
+  scoreEl.textContent = `正解 ${correctCount} / ${filteredQuestions.length}問中`;
 
   const q = filteredQuestions[currentIndex];
 
-  const sparkles = document.getElementById("sparkles");
-
-
-  // 「『犬』はどれ？」みたいに表示
-  if (questionEl) {
   const icon = q.icon ? `${q.icon} ` : "";
-　questionEl.textContent = `${icon}「${q.kanji}」はどれ？`;
-  }
+  questionEl.textContent = `${icon}「${q.kanji}」はどれ？`;
 
-  // 選択肢を作り直す
-  if (choicesWrap) {
-    choicesWrap.innerHTML = ""; // いったん空にする
+  choicesWrap.innerHTML = "";
+  messageEl.textContent = "";
 
-    // 選択肢をランダムにシャッフル
-    const shuffledChoices = [...q.choices].sort(() => Math.random() - 0.5);
+  const shuffledChoices = [...q.choices].sort(() => Math.random() - 0.5);
 
-    shuffledChoices.forEach((text) => {
-      const btn = document.createElement("button");
-      btn.textContent = text;
-      btn.className = "choiceBtn";
-      btn.addEventListener("click", () => checkAnswer(text));
-      choicesWrap.appendChild(btn);
-    });
-  }
-
-  // メッセージ初期化
-  if (messageEl) messageEl.textContent = "";
-
-  // 次へボタンは最初は押せない
-  if (nextBtn) nextBtn.disabled = true;
+  shuffledChoices.forEach((text) => {
+    const btn = document.createElement("button");
+    btn.textContent = text;
+    btn.className = "choiceBtn";
+    btn.addEventListener("click", () => checkAnswer(text));
+    choicesWrap.appendChild(btn);
+  });
 }
  
 
@@ -324,21 +321,36 @@ function checkAnswer(selected) {
   if (sel === ans) {
     messageEl.textContent = "正解！ 🎉";
     messageEl.style.color = "var(--ok)";
-    correctCount++;
     if (okSound) { okSound.currentTime = 0; okSound.play(); }
     sparkleBurst();
+    correctCount++;
   } else {
     messageEl.textContent = `ちがうよ。正解は「${q.answer}」`;
     messageEl.style.color = "var(--ng)";
     if (ngSound) { ngSound.currentTime = 0; ngSound.play(); }
   }
+  totalAnswered++;
   // ★自動で次の問題へ（2秒後）
 if (autoNextTimer) clearTimeout(autoNextTimer);
 autoNextTimer = setTimeout(() => {
-  messageEl.style.color = "";
-  nextQuestion();
-}, 2000);
 
+ if (totalAnswered >= filteredQuestions.length) {
+
+   const medalMessage = getMedal(correctCount, filteredQuestions.length);
+
+document.querySelector("main").innerHTML =
+  `<h1>🎉 クイズ終了！</h1>
+   <h2>${correctCount} / ${filteredQuestions.length} 正解！</h2>
+   <p style="font-size: 24px; font-weight: bold; margin: 16px 0;">${medalMessage}</p>
+   <button onclick="location.reload()">もう一回やる</button>`;
+  } else {
+
+    messageEl.style.color = "";
+    nextQuestion();
+
+  }
+
+}, 2000);
 
 }
 
@@ -361,6 +373,8 @@ if (levelSelect) {
     // "1年生" -> "g1", "2年生" -> "g2" に変換
     activeLevel = e.target.value === "1年生" ? "g1" : "g2";
     filteredQuestions = shuffleQuestions(getFilteredQuestions());
+    correctCount = 0;
+    totalAnswered = 0;
     currentIndex = 0;
     renderQuestion();
   });
@@ -368,13 +382,14 @@ if (levelSelect) {
 
 // 最初の表示
 function startGame() {
-  if (startScreen) startScreen.classList.add("hidden");
-  // レベル初期値をセレクトから取得
-  const levelValue = levelSelect.value;
-  activeLevel = levelValue === "1年生" ? "g1" : "g2";
   filteredQuestions = shuffleQuestions(getFilteredQuestions());
+  correctCount = 0;
+  totalAnswered = 0;
   currentIndex = 0;
-  renderQuestion(); // ここで初めて問題表示
+
+  if (startScreen) startScreen.classList.add("hidden");
+
+  renderQuestion();
 }
 
 // スタート画面を表示したままにする（最初は何もしない）
@@ -388,7 +403,9 @@ tabs.forEach(tab => {
     tabs.forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
     activeLevel = tab.dataset.grade === '1' ? 'g1' : 'g2';
-    filteredQuestions = getFilteredQuestions();
+    filteredQuestions = shuffleQuestions(getFilteredQuestions());
+    correctCount = 0;
+    totalAnswered = 0;
     currentIndex = 0;
     renderQuestion();
   });
