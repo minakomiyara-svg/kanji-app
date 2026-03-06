@@ -250,6 +250,7 @@ const okSound = document.getElementById("sound-ok");
 const ngSound = document.getElementById("sound-ng");
 
 let currentIndex = 0;
+let correctCount = 0;
 
 
 // 画面の要素（idやclassが違う場合は、ここだけ合わせればOK）
@@ -257,6 +258,7 @@ const questionEl = document.getElementById("question");
 const choicesWrap = document.getElementById("choices");
 const messageEl = document.getElementById("message");
 const sparkles = document.getElementById("sparkles");
+const scoreEl = document.getElementById("score");
 let autoNextTimer = null;
 
 let activeLevel = "g2";
@@ -273,6 +275,9 @@ function getFilteredQuestions() {
 
 // 質問を表示
 function renderQuestion() {
+
+  scoreEl.textContent = `正解 ${correctCount} / ${questions.length}`;
+
   const q = filteredQuestions[currentIndex];
 
   const sparkles = document.getElementById("sparkles");
@@ -319,6 +324,7 @@ function checkAnswer(selected) {
   if (sel === ans) {
     messageEl.textContent = "正解！ 🎉";
     messageEl.style.color = "var(--ok)";
+    correctCount++;
     if (okSound) { okSound.currentTime = 0; okSound.play(); }
     sparkleBurst();
   } else {
