@@ -1,8 +1,8 @@
-// 158問（好きに増やせます）
+// 240問（好きに増やせます）
 const questions = [
-  { level:"easy", kanji:"犬", icon:"🐶", choices:["いぬ","ねこ","とり"], answer:"いぬ" },
-  { level:"normal", kanji:"猫", icon:"🐱", choices:["さる","ねこ","うま"], answer:"ねこ" },
-  { level:"normal", kanji:"鳥", icon:"🐦", choices:["とり","さかな","いぬ"], answer:"とり" },
+  { grade:"g1", kanji:"犬", icon:"🐶", choices:["いぬ","ねこ","とり"], answer:"いぬ" },
+  { grade:"g2", kanji:"猫", icon:"🐱", choices:["さる","ねこ","うま"], answer:"ねこ" },
+  { grade:"g2", kanji:"鳥", icon:"🐦", choices:["とり","さかな","いぬ"], answer:"とり" },
   { grade: "g1", grade: "g2", kanji: "山", icon:"⛰️", choices: ["かわ", "うみ", "やま"], answer: "やま" },
   { grade: "g1", grade: "g2", kanji: "川", icon:"", choices: ["かわ", "もり", "そら"], answer: "かわ" },
   { grade: "g1", grade: "g2", kanji: "空", icon:"☁️", choices: ["そら", "はな", "つき"], answer: "そら" },
@@ -184,7 +184,7 @@ const messageEl = document.getElementById("message");
 const sparkles = document.getElementById("sparkles");
 let autoNextTimer = null;
 
-let activeLevel = "easy";
+let activeLevel = "g2";
 let filteredQuestions = [];
 
 const startScreen = document.getElementById("startScreen");
@@ -243,15 +243,18 @@ function checkAnswer(selected) {
 
   if (sel === ans) {
     messageEl.textContent = "正解！ 🎉";
+    messageEl.style.color = "var(--ok)";
     if (okSound) { okSound.currentTime = 0; okSound.play(); }
     sparkleBurst();
   } else {
     messageEl.textContent = `ちがうよ。正解は「${q.answer}」`;
+    messageEl.style.color = "var(--ng)";
     if (ngSound) { ngSound.currentTime = 0; ngSound.play(); }
   }
   // ★自動で次の問題へ（2秒後）
 if (autoNextTimer) clearTimeout(autoNextTimer);
 autoNextTimer = setTimeout(() => {
+  messageEl.style.color = "";
   nextQuestion();
 }, 2000);
 
@@ -265,9 +268,24 @@ function nextQuestion() {
   renderQuestion();
 }
 
+// レベルセレクトの変更イベント
+const levelSelect = document.getElementById("level");
+if (levelSelect) {
+  levelSelect.addEventListener("change", (e) => {
+    // "1年生" -> "g1", "2年生" -> "g2" に変換
+    activeLevel = e.target.value === "1年生" ? "g1" : "g2";
+    filteredQuestions = getFilteredQuestions();
+    currentIndex = 0;
+    renderQuestion();
+  });
+}
+
 // 最初の表示
 function startGame() {
   if (startScreen) startScreen.classList.add("hidden");
+  // レベル初期値をセレクトから取得
+  const levelValue = levelSelect.value;
+  activeLevel = levelValue === "1年生" ? "g1" : "g2";
   filteredQuestions = getFilteredQuestions();
   currentIndex = 0;
   renderQuestion(); // ここで初めて問題表示
