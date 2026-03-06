@@ -343,13 +343,18 @@ function nextQuestion() {
   renderQuestion();
 }
 
+// 質問をランダムにシャッフルする関数
+function shuffleQuestions(questions) {
+  return questions.sort(() => Math.random() - 0.5);
+}
+
 // レベルセレクトの変更イベント
 const levelSelect = document.getElementById("level");
 if (levelSelect) {
   levelSelect.addEventListener("change", (e) => {
     // "1年生" -> "g1", "2年生" -> "g2" に変換
     activeLevel = e.target.value === "1年生" ? "g1" : "g2";
-    filteredQuestions = getFilteredQuestions();
+    filteredQuestions = shuffleQuestions(getFilteredQuestions());
     currentIndex = 0;
     renderQuestion();
   });
@@ -361,7 +366,7 @@ function startGame() {
   // レベル初期値をセレクトから取得
   const levelValue = levelSelect.value;
   activeLevel = levelValue === "1年生" ? "g1" : "g2";
-  filteredQuestions = getFilteredQuestions();
+  filteredQuestions = shuffleQuestions(getFilteredQuestions());
   currentIndex = 0;
   renderQuestion(); // ここで初めて問題表示
 }
