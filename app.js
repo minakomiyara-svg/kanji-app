@@ -246,51 +246,78 @@ const questions = [
   { grade:"g2", kanji:"話す", icon:"💬", choices:["はなす","わ","ことば"], answer:"はなす" },
 ];
 
+// ── audio ──────────────────────────────────────────────────────
 const okSound = document.getElementById("sound-ok");
 const ngSound = document.getElementById("sound-ng");
 
+// ── localStorage ──────────────────────────────────────────────
+const WEAK_KEYS = { g1: "kapp_weak_g1", g2: "kapp_weak_g2" };
+
+function loadWeakList(grade) {
+  try { return JSON.parse(localStorage.getItem(WEAK_KEYS[grade])) || []; }
+  catch { return []; }
+}
+function saveWeakList(grade, list) {
+  localStorage.setItem(WEAK_KEYS[grade], JSON.stringify(list));
+}
+function markWeak(grade, kanji) {
+  const list = loadWeakList(grade);
+  if (!list.includes(kanji)) saveWeakList(grade, [...list, kanji]);
+}
+function clearWeak(grade, kanji) {
+  saveWeakList(grade, loadWeakList(grade).filter(k => k !== kanji));
+}
+
+// ── state ──────────────────────────────────────────────────────
 let currentIndex = 0;
 let correctCount = 0;
-let totalAnswered = 0; // for end‑of‑game detection
-
-
-// 画面の要素（idやclassが違う場合は、ここだけ合わせればOK）
-const questionEl = document.getElementById("question");
-const choicesWrap = document.getElementById("choices");
-const messageEl = document.getElementById("message");
-const sparkles = document.getElementById("sparkles");
-const scoreEl = document.getElementById("score");
+let totalAnswered = 0;
 let autoNextTimer = null;
-
 let activeLevel = "g2";
 let filteredQuestions = [];
+let isReviewMode = false;
 
-const startScreen = document.getElementById("startScreen");
-const startBtn = document.getElementById("startBtn");
+// ── DOM refs ───────────────────────────────────────────────────
+const questionEl       = document.getElementById("question");
+const choicesWrap      = document.getElementById("choices");
+const messageEl        = document.getElementById("message");
+const scoreEl          = document.getElementById("score");
+const sparkles         = document.getElementById("sparkles");
+const startScreen      = document.getElementById("startScreen");
+const resultsScreen    = document.getElementById("resultsScreen");
+const startBtn         = document.getElementById("startBtn");
+const startReviewBtn   = document.getElementById("startReviewBtn");
+const startWeakInfo    = document.getElementById("startWeakInfo");
+const retryBtn         = document.getElementById("retryBtn");
+const reviewBtn        = document.getElementById("reviewBtn");
+const resultScore      = document.getElementById("resultScore");
+const resultMedal      = document.getElementById("resultMedal");
+const resultsTitle     = document.getElementById("resultsTitle");
+const weakCountDisplay = document.getElementById("weakCountDisplay");
 
-
+// ── helpers ────────────────────────────────────────────────────
 function getFilteredQuestions() {
   return questions.filter(q => q.grade === activeLevel);
 }
 
 function getMedal(score, total) {
-  if (score === total) {
-    return "🥇 すごい！パーフェクト！";
-  } else if (score >= Math.ceil(total * 0.7)) {
-    return "🥈 すごい！よくできたね！";
-  } else if (score >= Math.ceil(total * 0.4)) {
-    return "🥉 がんばったね！";
-  } else {
-    return "🌱 つぎもやってみよう！";
-  }
+  if (score === total)                  return "🥇 すごい！パーフェクト！";
+  if (score >= Math.ceil(total * 0.7)) return "🥈 すごい！よくできたね！";
+  if (score >= Math.ceil(total * 0.4)) return "🥉 がんばったね！";
+  return "🌱 つぎもやってみよう！";
 }
 
+function shuffleArray(arr) {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
 
-// 質問を表示
+// ── render ─────────────────────────────────────────────────────
 function renderQuestion() {
-  scoreEl.textContent = `正解 ${correctCount} / ${filteredQuestions.length}問中`;
-
   const q = filteredQuestions[currentIndex];
+  if (!q) return;
+
+  const label = isReviewMode ? "復習" : "正解";
+  scoreEl.textContent = `${label} ${correctCount} / ${filteredQuestions.length}問中`;
 
   const icon = q.icon ? `${q.icon} ` : "";
   questionEl.textContent = `${icon}「${q.kanji}」はどれ？`;
@@ -298,9 +325,7 @@ function renderQuestion() {
   choicesWrap.innerHTML = "";
   messageEl.textContent = "";
 
-  const shuffledChoices = [...q.choices].sort(() => Math.random() - 0.5);
-
-  shuffledChoices.forEach((text) => {
+  shuffleArray(q.choices).forEach(text => {
     const btn = document.createElement("button");
     btn.textContent = text;
     btn.className = "choiceBtn";
@@ -308,93 +333,126 @@ function renderQuestion() {
     choicesWrap.appendChild(btn);
   });
 }
- 
 
+// ── answer ─────────────────────────────────────────────────────
 function checkAnswer(selected) {
-  const q = filteredQuestions[currentIndex];
+  choicesWrap.querySelectorAll("button").forEach(b => b.disabled = true);
 
+  const q = filteredQuestions[currentIndex];
   const sel = String(selected).trim();
   const ans = String(q.answer).trim();
-
-  if (!messageEl) return;
 
   if (sel === ans) {
     messageEl.textContent = "正解！ 🎉";
     messageEl.style.color = "var(--ok)";
     if (okSound) { okSound.currentTime = 0; okSound.play(); }
     sparkleBurst();
+    clearWeak(q.grade, q.kanji);
     correctCount++;
   } else {
     messageEl.textContent = `ちがうよ。正解は「${q.answer}」`;
     messageEl.style.color = "var(--ng)";
     if (ngSound) { ngSound.currentTime = 0; ngSound.play(); }
+    markWeak(q.grade, q.kanji);
   }
+
   totalAnswered++;
-  // ★自動で次の問題へ（2秒後）
-if (autoNextTimer) clearTimeout(autoNextTimer);
-autoNextTimer = setTimeout(() => {
 
- if (totalAnswered >= filteredQuestions.length) {
-
-   const medalMessage = getMedal(correctCount, filteredQuestions.length);
-
-document.querySelector("main").innerHTML =
-  `<h1>🎉 クイズ終了！</h1>
-   <h2>${correctCount} / ${filteredQuestions.length} 正解！</h2>
-   <p style="font-size: 24px; font-weight: bold; margin: 16px 0;">${medalMessage}</p>
-   <button onclick="location.reload()">もう一回やる</button>`;
-  } else {
-
-    messageEl.style.color = "";
-    nextQuestion();
-
-  }
-
-}, 2000);
-
+  if (autoNextTimer) clearTimeout(autoNextTimer);
+  autoNextTimer = setTimeout(() => {
+    if (totalAnswered >= filteredQuestions.length) {
+      showResults();
+    } else {
+      messageEl.style.color = "";
+      currentIndex = (currentIndex + 1) % filteredQuestions.length;
+      renderQuestion();
+    }
+  }, 2000);
 }
 
+// ── results ────────────────────────────────────────────────────
+function showResults() {
+  const weakList = loadWeakList(activeLevel);
 
-// 次の問題へ
-function nextQuestion() {
-  currentIndex = (currentIndex + 1) % filteredQuestions.length;
+  if (isReviewMode) {
+    resultsTitle.textContent = "✨ 復習おわり！";
+    resultScore.textContent = `${correctCount} / ${filteredQuestions.length} できたよ！`;
+    resultMedal.textContent = correctCount === filteredQuestions.length
+      ? "🌟 全部できた！すごい！"
+      : "💪 よくがんばったね！";
+  } else {
+    resultsTitle.textContent = "🎉 クイズ終了！";
+    resultScore.textContent = `${correctCount} / ${filteredQuestions.length} 正解！`;
+    resultMedal.textContent = getMedal(correctCount, filteredQuestions.length);
+  }
+
+  if (weakList.length > 0) {
+    weakCountDisplay.textContent = `まだ苦手な漢字が ${weakList.length} 問あるよ`;
+    reviewBtn.textContent = `苦手を復習する（${weakList.length}問）`;
+    reviewBtn.classList.remove("hidden");
+  } else {
+    weakCountDisplay.textContent = "苦手な漢字はないよ！🌈";
+    reviewBtn.classList.add("hidden");
+  }
+
+  resultsScreen.classList.remove("hidden");
+}
+
+// ── game flow ──────────────────────────────────────────────────
+function initGame(reviewMode) {
+  isReviewMode = reviewMode;
+  correctCount = 0;
+  totalAnswered = 0;
+  currentIndex = 0;
+  messageEl.style.color = "";
+  messageEl.textContent = "";
+  startScreen.classList.add("hidden");
+  resultsScreen.classList.add("hidden");
+}
+
+function startGame() {
+  initGame(false);
+  filteredQuestions = shuffleArray(getFilteredQuestions());
   renderQuestion();
 }
 
-// 質問をランダムにシャッフルする関数
-function shuffleQuestions(questions) {
-  return questions.sort(() => Math.random() - 0.5);
+function startReview() {
+  const weakList = loadWeakList(activeLevel);
+  const weakQuestions = questions.filter(q => q.grade === activeLevel && weakList.includes(q.kanji));
+  if (weakQuestions.length === 0) return;
+  initGame(true);
+  filteredQuestions = shuffleArray(weakQuestions);
+  renderQuestion();
 }
 
-// レベルセレクトの変更イベント
+function updateStartScreenWeakInfo() {
+  const weakList = loadWeakList(activeLevel);
+  if (weakList.length > 0) {
+    startWeakInfo.textContent = `まえにまちがえた漢字が ${weakList.length} 問あるよ`;
+    startReviewBtn.textContent = `苦手を復習する（${weakList.length}問）`;
+    startReviewBtn.classList.remove("hidden");
+  } else {
+    startWeakInfo.textContent = "";
+    startReviewBtn.classList.add("hidden");
+  }
+}
+
+// ── event listeners ────────────────────────────────────────────
+startBtn.addEventListener("click", startGame);
+retryBtn.addEventListener("click", () => location.reload());
+reviewBtn.addEventListener("click", startReview);
+startReviewBtn.addEventListener("click", startReview);
+
 const levelSelect = document.getElementById("level");
 if (levelSelect) {
-  levelSelect.addEventListener("change", (e) => {
-    // "1年生" -> "g1", "2年生" -> "g2" に変換
+  levelSelect.addEventListener("change", e => {
     activeLevel = e.target.value === "1年生" ? "g1" : "g2";
-    filteredQuestions = shuffleQuestions(getFilteredQuestions());
+    filteredQuestions = shuffleArray(getFilteredQuestions());
     correctCount = 0;
     totalAnswered = 0;
     currentIndex = 0;
     renderQuestion();
   });
-}
-
-// 最初の表示
-function startGame() {
-  filteredQuestions = shuffleQuestions(getFilteredQuestions());
-  correctCount = 0;
-  totalAnswered = 0;
-  currentIndex = 0;
-
-  if (startScreen) startScreen.classList.add("hidden");
-
-  renderQuestion();
-}
-
-// スタート画面を表示したままにする（最初は何もしない）
-if (startBtn) {
-  startBtn.addEventListener("click", startGame);
 }
 
 const tabs = document.querySelectorAll('.tab');
@@ -403,7 +461,7 @@ tabs.forEach(tab => {
     tabs.forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
     activeLevel = tab.dataset.grade === '1' ? 'g1' : 'g2';
-    filteredQuestions = shuffleQuestions(getFilteredQuestions());
+    filteredQuestions = shuffleArray(getFilteredQuestions());
     correctCount = 0;
     totalAnswered = 0;
     currentIndex = 0;
@@ -411,42 +469,30 @@ tabs.forEach(tab => {
   });
 });
 
+// ── init ───────────────────────────────────────────────────────
+updateStartScreenWeakInfo();
 
+// ── sparkle ────────────────────────────────────────────────────
 function sparkleBurst() {
   if (!sparkles) return;
-
-  // 既存を消す（連打対策）
   sparkles.innerHTML = "";
-
   const count = 14;
   for (let i = 0; i < count; i++) {
     const s = document.createElement("div");
     s.className = "sparkle";
-
-    // 飛ぶ方向（ランダム）
     const dx = (Math.random() * 260 - 130).toFixed(0) + "px";
     const dy = (Math.random() * 220 - 110).toFixed(0) + "px";
     s.style.setProperty("--dx", dx);
     s.style.setProperty("--dy", dy);
-
-    // サイズも少しランダム
     const size = 8 + Math.random() * 10;
     s.style.width = size + "px";
     s.style.height = size + "px";
-
-    // キラキラっぽい色（白〜薄黄色系）
     const r = 220 + Math.floor(Math.random() * 35);
     const g = 220 + Math.floor(Math.random() * 35);
     const b = 200 + Math.floor(Math.random() * 55);
     s.style.background = `rgb(${r},${g},${b})`;
-
     sparkles.appendChild(s);
   }
-
-  // 片付け
-  setTimeout(() => {
-    if (sparkles) sparkles.innerHTML = "";
-  }, 800);
+  setTimeout(() => { if (sparkles) sparkles.innerHTML = ""; }, 800);
 }
-
 

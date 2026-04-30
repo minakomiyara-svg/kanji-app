@@ -486,3 +486,50 @@ select{
     gap: 6px;
   }
 }
+
+/* ===== 苦手・復習機能 ===== */
+
+.weakInfo{
+  font-size: 14px;
+  font-weight: 700;
+  color: #e07a00;
+  margin: 0 0 12px;
+  min-height: 20px;
+}
+
+.resultScoreText{
+  font-size: 22px;
+  font-weight: 900;
+  margin: 4px 0 8px;
+}
+
+.medalText{
+  font-size: 20px;
+  font-weight: 900;
+  margin: 0 0 14px;
+}
+
+.secondaryBtn{
+  width: 100%;
+  border: 2px solid var(--accent);
+  border-radius: 14px;
+  padding: 11px 14px;
+  font-size: 15px;
+  font-weight: 900;
+  cursor: pointer;
+  background: #fff;
+  color: var(--accent);
+  margin-bottom: 10px;
+  transition: background .15s, color .15s;
+}
+
+.secondaryBtn:hover{
+  background: rgba(255, 111, 174, .08);
+}
+
+@media (max-width: 480px){
+  .secondaryBtn{
+    font-size: 17px;
+    padding: 13px 14px;
+  }
+}

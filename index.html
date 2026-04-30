@@ -9,11 +9,24 @@
   
  <div id="startScreen" class="overlay" role="dialog" aria-modal="true">
     <div class="overlayCard">
-      <h2>スタート！</h2>
+      <h2>漢字クイズ</h2>
       <p class="sub">ボタンを押したらクイズがはじまるよ</p>
+      <p id="startWeakInfo" class="weakInfo"></p>
       <button id="startBtn" class="primaryBtn">はじめる</button>
+      <button id="startReviewBtn" class="secondaryBtn hidden">苦手を復習する</button>
     </div>
-  </div> 
+  </div>
+
+  <div id="resultsScreen" class="overlay hidden" role="dialog" aria-modal="true">
+    <div class="overlayCard">
+      <h2 id="resultsTitle"></h2>
+      <p id="resultScore" class="resultScoreText"></p>
+      <p id="resultMedal" class="medalText"></p>
+      <p id="weakCountDisplay" class="weakInfo"></p>
+      <button id="reviewBtn" class="secondaryBtn hidden">苦手を復習する</button>
+      <button id="retryBtn" class="primaryBtn">もう一回やる</button>
+    </div>
+  </div>
 
  <main>
   <h1>漢字クイズ</h1>
