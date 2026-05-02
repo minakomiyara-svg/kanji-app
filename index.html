@@ -10,10 +10,38 @@
  <div id="startScreen" class="overlay" role="dialog" aria-modal="true">
     <div class="overlayCard">
       <h2>漢字クイズ</h2>
-      <p class="sub">ボタンを押したらクイズがはじまるよ</p>
-      <p id="startWeakInfo" class="weakInfo"></p>
-      <button id="startBtn" class="primaryBtn">はじめる</button>
-      <button id="startReviewBtn" class="secondaryBtn hidden">苦手を復習する</button>
+
+      <div class="gradeSection">
+        <div class="gradeHeader">
+          <span class="gradeLabel">小学校１年生</span>
+          <span id="weakInfo-g1" class="weakBadge"></span>
+        </div>
+        <div class="gradeButtons">
+          <button id="startBtn-g1" class="primaryBtn halfBtn">はじめる</button>
+          <button id="reviewStartBtn-g1" class="secondaryBtn halfBtn hidden">苦手を復習</button>
+        </div>
+      </div>
+
+      <div class="gradeSection">
+        <div class="gradeHeader">
+          <span class="gradeLabel">小学校２年生</span>
+          <span id="weakInfo-g2" class="weakBadge"></span>
+        </div>
+        <div class="gradeButtons">
+          <button id="startBtn-g2" class="primaryBtn halfBtn">はじめる</button>
+          <button id="reviewStartBtn-g2" class="secondaryBtn halfBtn hidden">苦手を復習</button>
+        </div>
+      </div>
+
+      <button id="weakListBtn" class="textBtn">苦手な漢字リストを見る 📋</button>
+    </div>
+  </div>
+
+  <div id="weakListScreen" class="overlay hidden" role="dialog" aria-modal="true">
+    <div class="overlayCard weakListCard">
+      <h2>苦手な漢字</h2>
+      <div id="weakListContent"></div>
+      <button id="weakListCloseBtn" class="primaryBtn">とじる</button>
     </div>
   </div>
 

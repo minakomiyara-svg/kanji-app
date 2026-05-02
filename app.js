@@ -285,9 +285,16 @@ const scoreEl          = document.getElementById("score");
 const sparkles         = document.getElementById("sparkles");
 const startScreen      = document.getElementById("startScreen");
 const resultsScreen    = document.getElementById("resultsScreen");
-const startBtn         = document.getElementById("startBtn");
-const startReviewBtn   = document.getElementById("startReviewBtn");
-const startWeakInfo    = document.getElementById("startWeakInfo");
+const weakListScreen   = document.getElementById("weakListScreen");
+const startBtnG1       = document.getElementById("startBtn-g1");
+const startBtnG2       = document.getElementById("startBtn-g2");
+const reviewStartBtnG1 = document.getElementById("reviewStartBtn-g1");
+const reviewStartBtnG2 = document.getElementById("reviewStartBtn-g2");
+const weakInfoG1       = document.getElementById("weakInfo-g1");
+const weakInfoG2       = document.getElementById("weakInfo-g2");
+const weakListBtn      = document.getElementById("weakListBtn");
+const weakListContent  = document.getElementById("weakListContent");
+const weakListCloseBtn = document.getElementById("weakListCloseBtn");
 const retryBtn         = document.getElementById("retryBtn");
 const reviewBtn        = document.getElementById("reviewBtn");
 const resultScore      = document.getElementById("resultScore");
@@ -410,13 +417,17 @@ function initGame(reviewMode) {
   resultsScreen.classList.add("hidden");
 }
 
-function startGame() {
+function startGame(grade) {
+  activeLevel = grade;
+  if (levelSelect) levelSelect.value = grade === "g1" ? "1年生" : "2年生";
   initGame(false);
   filteredQuestions = shuffleArray(getFilteredQuestions());
   renderQuestion();
 }
 
-function startReview() {
+function startReview(grade) {
+  activeLevel = grade;
+  if (levelSelect) levelSelect.value = grade === "g1" ? "1年生" : "2年生";
   const weakList = loadWeakList(activeLevel);
   const weakQuestions = questions.filter(q => q.grade === activeLevel && weakList.includes(q.kanji));
   if (weakQuestions.length === 0) return;
@@ -426,22 +437,77 @@ function startReview() {
 }
 
 function updateStartScreenWeakInfo() {
-  const weakList = loadWeakList(activeLevel);
-  if (weakList.length > 0) {
-    startWeakInfo.textContent = `まえにまちがえた漢字が ${weakList.length} 問あるよ`;
-    startReviewBtn.textContent = `苦手を復習する（${weakList.length}問）`;
-    startReviewBtn.classList.remove("hidden");
-  } else {
-    startWeakInfo.textContent = "";
-    startReviewBtn.classList.add("hidden");
+  [["g1", weakInfoG1, reviewStartBtnG1], ["g2", weakInfoG2, reviewStartBtnG2]].forEach(([grade, infoEl, btn]) => {
+    const weakList = loadWeakList(grade);
+    if (weakList.length > 0) {
+      infoEl.textContent = `苦手 ${weakList.length}問`;
+      btn.textContent = `苦手を復習（${weakList.length}問）`;
+      btn.classList.remove("hidden");
+    } else {
+      infoEl.textContent = "";
+      btn.classList.add("hidden");
+    }
+  });
+}
+
+function showWeakList() {
+  weakListContent.innerHTML = "";
+
+  const sections = [
+    { grade: "g1", label: "小学校１年生" },
+    { grade: "g2", label: "小学校２年生" }
+  ];
+
+  let hasAny = false;
+
+  sections.forEach(({ grade, label }) => {
+    const weakList = loadWeakList(grade);
+    if (weakList.length === 0) return;
+    hasAny = true;
+
+    const weakQuestions = questions.filter(q => q.grade === grade && weakList.includes(q.kanji));
+
+    const section = document.createElement("div");
+    section.className = "weakSection";
+
+    const title = document.createElement("p");
+    title.className = "weakSectionTitle";
+    title.textContent = `${label}（${weakList.length}問）`;
+    section.appendChild(title);
+
+    const grid = document.createElement("div");
+    grid.className = "kanjiGrid";
+
+    weakQuestions.forEach(q => {
+      const chip = document.createElement("div");
+      chip.className = "kanjiChip";
+      chip.innerHTML = `<span class="kanjiChar">${q.kanji}</span><span class="kanjiReading">${q.answer}</span>`;
+      grid.appendChild(chip);
+    });
+
+    section.appendChild(grid);
+    weakListContent.appendChild(section);
+  });
+
+  if (!hasAny) {
+    const msg = document.createElement("p");
+    msg.className = "noWeakMsg";
+    msg.textContent = "苦手な漢字はないよ！🌈";
+    weakListContent.appendChild(msg);
   }
+
+  weakListScreen.classList.remove("hidden");
 }
 
 // ── event listeners ────────────────────────────────────────────
-startBtn.addEventListener("click", startGame);
+startBtnG1.addEventListener("click", () => startGame("g1"));
+startBtnG2.addEventListener("click", () => startGame("g2"));
+reviewStartBtnG1.addEventListener("click", () => startReview("g1"));
+reviewStartBtnG2.addEventListener("click", () => startReview("g2"));
 retryBtn.addEventListener("click", () => location.reload());
-reviewBtn.addEventListener("click", startReview);
-startReviewBtn.addEventListener("click", startReview);
+reviewBtn.addEventListener("click", () => startReview(activeLevel));
+weakListBtn.addEventListener("click", showWeakList);
+weakListCloseBtn.addEventListener("click", () => weakListScreen.classList.add("hidden"));
 
 const levelSelect = document.getElementById("level");
 if (levelSelect) {
