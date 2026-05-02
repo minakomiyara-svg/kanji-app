@@ -669,6 +669,23 @@ select{
   margin: -6px 0 8px;
 }
 
+.backToMenuBtn{
+  display: block;
+  margin: 18px auto 0;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: background .15s;
+}
+.backToMenuBtn:hover{
+  background: rgba(120,90,60,.08);
+}
+
 @media (max-width: 480px){
   .secondaryBtn{
     font-size: 17px;

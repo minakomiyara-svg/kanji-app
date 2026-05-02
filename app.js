@@ -552,6 +552,15 @@ reviewBtn.addEventListener("click", () => startReview(activeLevel));
 weakListBtn.addEventListener("click", showWeakList);
 weakListCloseBtn.addEventListener("click", () => weakListScreen.classList.add("hidden"));
 
+const backToMenuBtn = document.getElementById("backToMenuBtn");
+backToMenuBtn.addEventListener("click", () => {
+  if (autoNextTimer) clearTimeout(autoNextTimer);
+  startScreen.classList.remove("hidden");
+  resultsScreen.classList.add("hidden");
+  renderChildTabs();
+  updateStartScreenWeakInfo();
+});
+
 const levelSelect = document.getElementById("level");
 if (levelSelect) {
   levelSelect.addEventListener("change", e => {
