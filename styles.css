@@ -640,6 +640,35 @@ select{
   background: rgba(255, 111, 174, .08);
 }
 
+/* ===== 子どもタブ ===== */
+.childTabs{
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.childTab{
+  flex: 1;
+  padding: 9px 10px;
+  border: 2px solid rgba(120,90,60,.14);
+  border-radius: 10px;
+  background: rgba(255,245,230,.55);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+.childTab.active{
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  color: white;
+  border-color: transparent;
+}
+.childBadge{
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  margin: -6px 0 8px;
+}
+
 @media (max-width: 480px){
   .secondaryBtn{
     font-size: 17px;

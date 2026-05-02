@@ -251,14 +251,28 @@ const okSound = document.getElementById("sound-ok");
 const ngSound = document.getElementById("sound-ng");
 
 // ── localStorage ──────────────────────────────────────────────
-const WEAK_KEYS = { g1: "kapp_weak_g1", g2: "kapp_weak_g2" };
+const CHILD_NAMES_KEY = "kapp_child_names";
+const ACTIVE_CHILD_KEY = "kapp_active_child";
+
+let childNames = (() => {
+  try { return JSON.parse(localStorage.getItem(CHILD_NAMES_KEY)) || ["こども1", "こども2"]; }
+  catch { return ["こども1", "こども2"]; }
+})();
+let activeChildIndex = (() => {
+  const n = parseInt(localStorage.getItem(ACTIVE_CHILD_KEY) || "0", 10);
+  return isNaN(n) || n < 0 || n >= childNames.length ? 0 : n;
+})();
+
+function weakKey(grade) {
+  return `kapp_weak_${grade}_${activeChildIndex}`;
+}
 
 function loadWeakList(grade) {
-  try { return JSON.parse(localStorage.getItem(WEAK_KEYS[grade])) || []; }
+  try { return JSON.parse(localStorage.getItem(weakKey(grade))) || []; }
   catch { return []; }
 }
 function saveWeakList(grade, list) {
-  localStorage.setItem(WEAK_KEYS[grade], JSON.stringify(list));
+  localStorage.setItem(weakKey(grade), JSON.stringify(list));
 }
 function markWeak(grade, kanji) {
   const list = loadWeakList(grade);
@@ -415,6 +429,8 @@ function initGame(reviewMode) {
   messageEl.textContent = "";
   startScreen.classList.add("hidden");
   resultsScreen.classList.add("hidden");
+  const badge = document.getElementById("childBadge");
+  if (badge) badge.textContent = childNames[activeChildIndex];
 }
 
 function startGame(grade) {
@@ -434,6 +450,33 @@ function startReview(grade) {
   initGame(true);
   filteredQuestions = shuffleArray(weakQuestions);
   renderQuestion();
+}
+
+function renderChildTabs() {
+  const container = document.getElementById("childTabs");
+  if (!container) return;
+  container.innerHTML = "";
+  childNames.forEach((name, i) => {
+    const tab = document.createElement("button");
+    tab.className = "childTab" + (i === activeChildIndex ? " active" : "");
+    tab.textContent = i === activeChildIndex ? `${name} ✏` : name;
+    tab.addEventListener("click", () => {
+      if (i === activeChildIndex) {
+        const newName = prompt("なまえを入力", childNames[i]);
+        if (!newName || !newName.trim()) return;
+        childNames[i] = newName.trim();
+        localStorage.setItem(CHILD_NAMES_KEY, JSON.stringify(childNames));
+      } else {
+        activeChildIndex = i;
+        localStorage.setItem(ACTIVE_CHILD_KEY, String(i));
+      }
+      renderChildTabs();
+      updateStartScreenWeakInfo();
+    });
+    container.appendChild(tab);
+  });
+  const badge = document.getElementById("childBadge");
+  if (badge) badge.textContent = childNames[activeChildIndex];
 }
 
 function updateStartScreenWeakInfo() {
@@ -536,6 +579,7 @@ tabs.forEach(tab => {
 });
 
 // ── init ───────────────────────────────────────────────────────
+renderChildTabs();
 updateStartScreenWeakInfo();
 
 // ── sparkle ────────────────────────────────────────────────────
